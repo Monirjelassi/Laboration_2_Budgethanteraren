@@ -30,7 +30,7 @@ public class Menu {
                     IO.println("Save to file");
                     break;
                 case 6:
-                    IO.println("Exit");
+                    IO.println("Shutting down...");
                     running = false;
                     break;
                 default:
