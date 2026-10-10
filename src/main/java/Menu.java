@@ -5,6 +5,7 @@ public class Menu {
         boolean running = true;
 
         while (running) {
+            showmenu();
             int choice;
             try {
                 choice = Integer.parseInt(IO.readln("Choose an option: "));
@@ -36,5 +37,16 @@ public class Menu {
                     IO.println("Invalid choice");
             }
         }
+    }
+
+    public void showmenu(){
+        IO.println("Budget Manager");
+        IO.println("==============");
+        IO.println("1. Add transaction");
+        IO.println("2. Show all transactions");
+        IO.println("3. Show balance and summary per category");
+        IO.println("4. Filter transactions");
+        IO.println("5. Save to file");
+        IO.println("6. Exit");
     }
 }
