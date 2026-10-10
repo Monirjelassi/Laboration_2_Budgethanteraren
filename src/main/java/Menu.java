@@ -14,16 +14,16 @@ public class Menu {
             }
             switch (choice) {
                 case 1:
-                    IO.println("Add transaktion");
+                    IO.println("Add transaction");
                     break;
                 case 2:
-                    IO.println("Show all transaktions");
+                    IO.println("Show all transactions");
                     break;
                 case 3:
                     IO.println("Show balance and summary per category");
                     break;
                 case 4:
-                    IO.println("Filter transaktions");
+                    IO.println("Filter transactions");
                     break;
                 case 5:
                     IO.println("Save to file");
