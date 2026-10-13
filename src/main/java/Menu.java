@@ -1,4 +1,6 @@
 import java.time.LocalDate;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Menu {
     private Repository<Transaction> repo = new Repository<>();
@@ -27,6 +29,7 @@ public class Menu {
                     break;
                 case 3:
                     IO.println("Show balance and summary per category");
+                    showSummary();
                     break;
                 case 4:
                     IO.println("Filter transactions");
@@ -44,7 +47,7 @@ public class Menu {
         }
     }
 
-    public void showMenu(){
+    public void showMenu() {
         IO.println("Budget Manager");
         IO.println("==============");
         IO.println("1. Add transaction");
@@ -55,7 +58,7 @@ public class Menu {
         IO.println("6. Exit");
     }
 
-    private void addTransaction(){
+    private void addTransaction() {
         double amount = Double.parseDouble(IO.readln("Enter an amount to add: "));
         String category = IO.readln("Choose category: ").toLowerCase();
         String typeInput = IO.readln("Choose Transaction type: 1 = Income, 2 = Expense: ");
@@ -74,8 +77,25 @@ public class Menu {
 
     }
 
-    private void showTransaction(){
+    private void showTransaction() {
         repo.findAll().forEach(System.out::println);
+    }
+
+    private void showSummary() {
+        double balance = repo.findAll().stream()
+                .mapToDouble(t -> t.type() == TransactionType.INCOME ? t.amount() : -t.amount())
+                .sum();
+
+        Map<String, Double> perCategory = repo.findAll().stream()
+                .collect(Collectors.groupingBy(
+                        Transaction::category,
+                        Collectors.summingDouble(t -> t.type() == TransactionType.INCOME ? t.amount() : -t.amount())));
+        IO.println("Balance: " + balance);
+        perCategory.forEach((category, sum) -> IO.println(category + ": " + sum));
+
+
+        ;
+
     }
 }
 
