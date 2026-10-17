@@ -33,6 +33,7 @@ public class Menu {
                     break;
                 case 4:
                     IO.println("Filter transactions");
+                    filterTransactionsByType();
                     break;
                 case 5:
                     IO.println("Save to file");
@@ -97,6 +98,21 @@ public class Menu {
         ;
 
     }
+
+    private void filterTransactionsByType() {
+        String input = IO.readln("Press 1 to filter by income\nPress 2 to filter by expense\nChoice: ");
+        TransactionType type;
+        if (input.equals("1")) {
+            type = TransactionType.INCOME;
+        } else if (input.equals("2")) {
+            type = TransactionType.EXPENSE;
+        } else {
+            IO.println("Invalid type.");
+            return;
+        }
+        repo.findWhere(t -> t.type() == type).forEach(IO::println);
+    }
+    
 }
 
 
