@@ -1,6 +1,7 @@
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,5 +16,26 @@ public class TransactionFileHandler {
         } catch (IOException e) {
             IO.println("Unable to save transactions " + e.getMessage());
         }
+    }
+
+    public List<Transaction> load() {
+        List<Transaction> result = new ArrayList<>();
+        Path path = Path.of("transactions.csv");
+        if (!Files.exists(path)) {
+            return result;
+        }
+        try {
+            for (String line : Files.readAllLines(path)) {
+                String[]parts = line.split(",");
+                LocalDate date = LocalDate.parse(parts[0]);
+                double amount = Double.parseDouble(parts[1]);
+                String category = parts[2];
+                TransactionType type = TransactionType.valueOf(parts[3]);
+                result.add(new Transaction(date, amount, category, type));
+            }
+        } catch (IOException e) {
+            IO.println("Unable to load transactions " + e.getMessage());
+        }
+        return result;
     }
 }

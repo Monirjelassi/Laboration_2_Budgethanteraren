@@ -8,8 +8,11 @@ public class Menu {
 
     public void startMenu() {
 
-        boolean running = true;
+        for (Transaction t : fileHandler.load()) {
+            repo.add(t);
+        }
 
+        boolean running = true;
         while (running) {
             showMenu();
             int choice;
@@ -114,7 +117,7 @@ public class Menu {
         }
         repo.findWhere(t -> t.type() == type).forEach(IO::println);
     }
-    
+
 }
 
 
