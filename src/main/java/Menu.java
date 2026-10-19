@@ -4,6 +4,7 @@ import java.util.stream.Collectors;
 
 public class Menu {
     private Repository<Transaction> repo = new Repository<>();
+    private TransactionFileHandler fileHandler = new TransactionFileHandler();
 
     public void startMenu() {
 
@@ -37,6 +38,7 @@ public class Menu {
                     break;
                 case 5:
                     IO.println("Save to file");
+                    fileHandler.save(repo.findAll());
                     break;
                 case 6:
                     IO.println("Shutting down...");
