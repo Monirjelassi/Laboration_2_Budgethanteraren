@@ -41,7 +41,7 @@ public class Menu {
                     break;
                 case 5:
                     IO.println("Save to file");
-                    fileHandler.save(repo.findAll());
+                    saveToFile();
                     break;
                 case 6:
                     IO.println("Shutting down...");
@@ -84,7 +84,7 @@ public class Menu {
     }
 
     private void showTransaction() {
-        repo.findAll().forEach(System.out::println);
+        repo.findAll().forEach(IO::println);
     }
 
     private void showSummary() {
@@ -98,9 +98,6 @@ public class Menu {
                         Collectors.summingDouble(t -> t.type() == TransactionType.INCOME ? t.amount() : -t.amount())));
         IO.println("Balance: " + balance);
         perCategory.forEach((category, sum) -> IO.println(category + ": " + sum));
-
-
-        ;
 
     }
 
@@ -116,6 +113,10 @@ public class Menu {
             return;
         }
         repo.findWhere(t -> t.type() == type).forEach(IO::println);
+    }
+
+    private void saveToFile() {
+        fileHandler.save(repo.findAll());
     }
 
 }
