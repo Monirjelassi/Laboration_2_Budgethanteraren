@@ -1,20 +1,13 @@
-
 public class Menu {
-    private Repository<Transaction> repo = new Repository<>();
-    private final TransactionFileHandler fileHandler = new TransactionFileHandler();
     private final TransactionService transactionService = new TransactionService();
-
 
     public void startMenu() {
 
         try {
-            for (Transaction t : fileHandler.load()) {
-                repo.add(t);
-            }
+            transactionService.loadFromFile();
         } catch (FileFormatException e) {
             IO.println("Could not load file: " + e.getMessage());
         }
-
 
         boolean running = true;
         while (running) {
@@ -29,22 +22,19 @@ public class Menu {
             switch (choice) {
                 case 1:
                     IO.println("Add transaction");
-                    double amount = Double.parseDouble(IO.readln("Enter an amount to add: "));
-                    String category = IO.readln("Choose category: ").toLowerCase();
-                    String typeInput = IO.readln("Choose Transaction type: 1 = Income, 2 = Expense: ");
-                    transactionService.addTransaction(amount, category, typeInput);
+                    addTransaction();
                     break;
                 case 2:
                     IO.println("Show all transactions");
-                    transactionService.showTransaction();
+                    transactionService.getTransactions().forEach(IO::println);
                     break;
                 case 3:
                     IO.println("Show balance and summary per category");
-                    transactionService.showSummary();
+                    showSummary();
                     break;
                 case 4:
                     IO.println("Filter transactions");
-                    transactionService.filterTransactionsByType();
+                    filterTransactions();
                     break;
                 case 5:
                     IO.println("Saved to file");
@@ -71,7 +61,28 @@ public class Menu {
         IO.println("6. Exit");
     }
 
+    private void addTransaction() {
+        double amount = Double.parseDouble(IO.readln("Enter an amount to add: "));
+        String category = IO.readln("Choose category: ").toLowerCase();
+        String typeInput = IO.readln("Choose Transaction type: 1 = Income, 2 = Expense: ");
+        if (!transactionService.addTransaction(amount, category, typeInput)) {
+            IO.println("Invalid type, transaction not added.");
+        }
+    }
+
+    private void showSummary() {
+        IO.println("Balance: " + transactionService.getBalance());
+        transactionService.getSummaryPerCategory()
+                .forEach((category, sum) -> IO.println(category + ": " + sum));
+    }
+
+    private void filterTransactions() {
+        String input = IO.readln("Press 1 to filter by income\nPress 2 to filter by expense\nChoice: ");
+        TransactionType type = transactionService.parseType(input);
+        if (type == null) {
+            IO.println("Invalid type.");
+            return;
+        }
+        transactionService.filterByType(type).forEach(IO::println);
+    }
 }
-
-
-//LocalDate date, double amount, String category, TransactionType type

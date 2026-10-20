@@ -1,5 +1,6 @@
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TransactionServiceTest {
 
@@ -10,8 +11,16 @@ public class TransactionServiceTest {
     public void setUp() {
         transactionService = new TransactionService();
     }
-//    @Test
-//    public void shouldAddTransaction() {
-//        transactionService.addTransaction();
-//    }
+    @Test
+    public void shouldAddTransaction() {
+        boolean added = transactionService.addTransaction(100, "salary", "1");
+
+        assertTrue(added);
+        assertEquals(1, transactionService.getTransactions().size());
+
+        Transaction result = transactionService.getTransactions().get(0);
+        assertEquals(100, result.amount());
+        assertEquals("salary", result.category());
+        assertEquals(TransactionType.INCOME, result.type());
+    }
 }
