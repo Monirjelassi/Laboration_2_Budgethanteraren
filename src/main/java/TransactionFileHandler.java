@@ -7,21 +7,20 @@ import java.util.List;
 import java.time.format.DateTimeParseException;
 
 public class TransactionFileHandler {
-    public void save(List<Transaction> transactions) {
+    public void save(List<Transaction> transactions, Path path) {
         List<String> lines = new ArrayList<>();
         for (Transaction t : transactions) {
             lines.add(t.date() + "," + t.amount() + "," + t.category() + "," + t.type());
         }
         try {
-            Files.write(Path.of("transactions.csv"), lines);
+            Files.write(path, lines);
         } catch (IOException e) {
             IO.println("Unable to save transactions " + e.getMessage());
         }
     }
 
-    public List<Transaction> load() {
+    public List<Transaction> load(Path path) {
         List<Transaction> result = new ArrayList<>();
-        Path path = Path.of("transactions.csv");
         if (!Files.exists(path)) {
             return result;
         }

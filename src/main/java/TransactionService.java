@@ -1,3 +1,4 @@
+import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -7,6 +8,16 @@ public class TransactionService {
 
     private final Repository<Transaction> repo = new Repository<>();
     private final TransactionFileHandler fileHandler = new TransactionFileHandler();
+    private final Path filePath;
+
+    public TransactionService() {
+        this(Path.of("transactions.csv"));
+    }
+
+    // Lets tests use a temporary file instead of the real one
+    public TransactionService(Path filePath) {
+        this.filePath = filePath;
+    }
 
     public boolean addTransaction(double amount, String category, String typeInput) {
         TransactionType type = parseType(typeInput);
@@ -48,13 +59,13 @@ public class TransactionService {
     }
 
     public void loadFromFile() {
-        for (Transaction t : fileHandler.load()) {
+        for (Transaction t : fileHandler.load(filePath)) {
             repo.add(t);
         }
     }
 
     public void saveToFile() {
-        fileHandler.save(repo.findAll());
+        fileHandler.save(repo.findAll(), filePath);
     }
 
     private double signedAmount(Transaction t) {
