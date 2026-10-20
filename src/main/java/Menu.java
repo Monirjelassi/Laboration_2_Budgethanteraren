@@ -40,7 +40,7 @@ public class Menu {
                     filterTransactionsByType();
                     break;
                 case 5:
-                    IO.println("Save to file");
+                    IO.println("Saved to file");
                     saveToFile();
                     break;
                 case 6:
