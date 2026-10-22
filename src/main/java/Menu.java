@@ -1,4 +1,7 @@
+import java.util.logging.Logger;
+
 public class Menu {
+    private static final Logger logger = Logger.getLogger(Menu.class.getName());
     private final TransactionService transactionService = new TransactionService();
 
     public void startMenu() {
@@ -16,6 +19,7 @@ public class Menu {
             try {
                 choice = Integer.parseInt(IO.readln("Choose an option: "));
             } catch (NumberFormatException e) {
+                logger.warning("Non-numeric menu choice entered");
                 IO.println("Please enter a number! (1-6)");
                 continue;
             }
@@ -45,6 +49,7 @@ public class Menu {
                     running = false;
                     break;
                 default:
+                    logger.warning("Menu choice out of range: " + choice);
                     IO.println("Invalid choice");
             }
         }
@@ -67,11 +72,14 @@ public class Menu {
             String category = IO.readln("Choose category: ").toLowerCase();
             String typeInput = IO.readln("Choose Transaction type: 1 = Income, 2 = Expense: ");
             if (!transactionService.addTransaction(amount, category, typeInput)) {
+                logger.warning("Invalid transaction type entered: " + typeInput);
                 IO.println("Invalid type, transaction not added.");
             }
         } catch (NumberFormatException e) {
+            logger.warning("Non-numeric amount entered");
             IO.println("Amount must be a number!");
         } catch (InvalidTransactionException e) {
+            logger.warning("Invalid transaction rejected: " + e.getMessage());
             IO.println("Invalid transaction: " + e.getMessage());
         }
 
@@ -87,6 +95,7 @@ public class Menu {
         String input = IO.readln("Press 1 to filter by income\nPress 2 to filter by expense\nChoice: ");
         TransactionType type = transactionService.parseType(input);
         if (type == null) {
+            logger.warning("Invalid filter type entered: " + input);
             IO.println("Invalid type.");
             return;
         }

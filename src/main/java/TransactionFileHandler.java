@@ -17,7 +17,7 @@ public class TransactionFileHandler {
         try {
             Files.write(path, lines);
         } catch (IOException e) {
-            IO.println("Unable to save transactions " + e.getMessage());
+            logger.severe("Unable to save transactions: " + e.getMessage());
         }
     }
 
@@ -37,11 +37,12 @@ public class TransactionFileHandler {
                     TransactionType type = TransactionType.valueOf(parts[3]);
                     result.add(new Transaction(date, amount, category, type));
                 } catch (ArrayIndexOutOfBoundsException | DateTimeParseException | IllegalArgumentException e) {
+                    logger.warning("Invalid data on line " + (i + 1) + ": " + lines.get(i));
                     throw new FileFormatException("Invalid data on line " + (i + 1) + ": " + lines.get(i));
                 }
             }
         } catch (IOException e) {
-            IO.println("Unable to load transactions " + e.getMessage());
+            logger.severe("Unable to load transactions: " + e.getMessage());
         }
         return result;
     }
