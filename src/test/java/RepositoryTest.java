@@ -27,6 +27,16 @@ public class RepositoryTest {
     }
 
     @Test
+    public void findAllShouldReturnTheSameObjectThatWasAdded() {
+        Repository<Object> objectRepository = new Repository<>();
+        Object entry = new Object();
+
+        objectRepository.add(entry);
+
+        assertSame(entry, objectRepository.findAll().get(0));
+    }
+
+    @Test
     public void findWhereShouldReturnOnlyMatchingEntries() {
         repository.add("apple");
         repository.add("banana");
