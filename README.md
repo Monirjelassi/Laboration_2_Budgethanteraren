@@ -23,12 +23,29 @@ Fel loggas med `java.util.logging`. Logiken testas med JUnit.
 
 ### Hur upptäckte jag buggen?
 
-
+Jag skrev mitt första enhetstest för `addTransaction` och skickade in beloppet
+`100`, kategorin `"income"` och typen `"Income"`. Jag var osäker på hur
+`typeInput` skulle skrivas, och tänkte på mina enum-värden `INCOME` och
+`EXPENSE`. Jag kontrollerade med `assertEquals` på storleken av
+`getTransactions()` och förväntade mig 1, men listan var tom. Felet kunde i
+praktiken ha legat i vilken som helst av de tre parametrarna.
+Men var redan på förhand relativt säker på att typeInput parametern var fel.
 
 ### Hur felsökte jag den?
 
-
+Jag gick igenom `addTransaction` och följde anropet in i `parseType`. Där
+jämförs indatan mot `"1"` och `"2"`, och allt annat ger `null`. Då avslutas
+metoden med `false` innan något läggs i `repo`, och det är därför ingen
+transaktion lades till. Jag var ovan vid hur enums och menyval hänger ihop och
+behövde hjälp att se hur det egentligen skulle se ut.
 
 ### Hur åtgärdade jag den?
 
+Felet låg i testet och inte i programmet. Metoden tar emot menyvalet från
+användaren, alltså `"1"` eller `"2"`, och inte ordet "Income". När jag väl
+visste var problemet låg var det en enkel fix: jag ändrade testet till att
+skicka `"1"` och körde det igen. Då blev `size()` 1 som jag förväntade mig och
+testet blev grönt. Jag lade också till en kontroll av returvärdet med
+`assertTrue` och skrev ett test som kontrollerar att en ogiltig typ ger `false`
+och att ingenting läggs till.
 
