@@ -31,6 +31,19 @@ public class TransactionServiceTest {
     }
 
     @Test
+    public void invalidAmountInputInAddTransactionShouldReturnInvalidTransactionException()
+    {
+        assertThrows(InvalidTransactionException.class, () -> transactionService.addTransaction(0, "salary", "1"));
+    }
+
+    @Test
+    public void invalidCategoryInputInAddTransactionShouldReturnInvalidTransactionException()
+    {
+        assertThrows(InvalidTransactionException.class, () -> transactionService.addTransaction(100, " ", "1"));
+    }
+
+
+    @Test
     public void canHoldMoreThenOneTransaction() {
         transactionService.addTransaction(100, "salary", "1");
         transactionService.addTransaction(100, "salary", "2");
