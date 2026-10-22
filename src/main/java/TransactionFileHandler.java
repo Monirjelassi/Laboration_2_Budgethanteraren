@@ -5,8 +5,10 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.time.format.DateTimeParseException;
+import java.util.logging.Logger;
 
 public class TransactionFileHandler {
+    private static final Logger logger = Logger.getLogger(TransactionFileHandler.class.getName());
     public void save(List<Transaction> transactions, Path path) {
         List<String> lines = new ArrayList<>();
         for (Transaction t : transactions) {

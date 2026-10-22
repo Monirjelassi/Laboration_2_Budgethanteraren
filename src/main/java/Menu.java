@@ -62,12 +62,19 @@ public class Menu {
     }
 
     private void addTransaction() {
-        double amount = Double.parseDouble(IO.readln("Enter an amount to add: "));
-        String category = IO.readln("Choose category: ").toLowerCase();
-        String typeInput = IO.readln("Choose Transaction type: 1 = Income, 2 = Expense: ");
-        if (!transactionService.addTransaction(amount, category, typeInput)) {
-            IO.println("Invalid type, transaction not added.");
+        try {
+            double amount = Double.parseDouble(IO.readln("Enter an amount to add: "));
+            String category = IO.readln("Choose category: ").toLowerCase();
+            String typeInput = IO.readln("Choose Transaction type: 1 = Income, 2 = Expense: ");
+            if (!transactionService.addTransaction(amount, category, typeInput)) {
+                IO.println("Invalid type, transaction not added.");
+            }
+        } catch (NumberFormatException e) {
+            IO.println("Amount must be a number!");
+        } catch (InvalidTransactionException e) {
+            IO.println("Invalid transaction: " + e.getMessage());
         }
+
     }
 
     private void showSummary() {
