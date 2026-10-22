@@ -20,6 +20,12 @@ public class TransactionService {
     }
 
     public boolean addTransaction(double amount, String category, String typeInput) {
+        if (amount <= 0) {
+            throw new InvalidTransactionException("Amount must be greater than 0");
+        }
+        if (category == null || category.isBlank()) {
+            throw new InvalidTransactionException("Category cannot be empty");
+        }
         TransactionType type = parseType(typeInput);
         if (type == null) {
             return false;

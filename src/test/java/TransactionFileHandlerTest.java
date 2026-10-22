@@ -39,7 +39,7 @@ public class TransactionFileHandlerTest {
     }
 
     @Test
-    public void loadShouldThrowOnLineWithTooFewParts(@TempDir Path tempDir) throws IOException {
+    public void loadShouldThrowWithTooFewParts(@TempDir Path tempDir) throws IOException {
         Path file = tempDir.resolve("broken.csv");
         Files.writeString(file, "2026-10-19,100.0,salary\n");
 
